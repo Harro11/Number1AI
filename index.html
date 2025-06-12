@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Assistant</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f0f4f8;
+    }
+    .chat-box {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+  <div class="w-full max-w-xl bg-white shadow-xl rounded-lg p-6 space-y-4">
+    <h1 class="text-3xl font-bold text-center text-blue-700">AI Assistant</h1>
+    <div id="chat" class="chat-box bg-gray-100 p-4 rounded-md space-y-2 h-96 overflow-y-auto">
+      <!-- Chat messages will appear here -->
+    </div>
+    <form id="chatForm" class="flex gap-2">
+      <input id="userInput" type="text" placeholder="Ask me something..." required class="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("chatForm");
+    const userInput = document.getElementById("userInput");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const message = userInput.value.trim();
+      if (message === "") return;
+
+      addMessage("You", message, "text-right text-blue-600");
+      userInput.value = "";
+      chat.scrollTop = chat.scrollHeight;
+
+      // Simulated AI response
+      setTimeout(() => {
+        const response = getFakeAIResponse(message);
+        addMessage("AI", response, "text-left text-green-600");
+        chat.scrollTop = chat.scrollHeight;
+      }, 700);
+    });
+
+    function addMessage(sender, text, style) {
+      const msg = document.createElement("div");
+      msg.innerHTML = `<p class="${style}"><strong>${sender}:</strong> ${text}</p>`;
+      chat.appendChild(msg);
+    }
+
+    function getFakeAIResponse(userMessage) {
+      const lower = userMessage.toLowerCase();
+      if (lower.includes("hello") || lower.includes("hi")) return "Hello! How can I help you today?";
+      if (lower.includes("your name")) return "I'm your friendly AI assistant.";
+      if (lower.includes("time")) return "It's " + new Date().toLocaleTimeString();
+      if (lower.includes("date")) return "Today's date is " + new Date().toLocaleDateString();
+      return "That's interesting! Tell me more.";
+    }
+  </script>
+</body>
+</html>
